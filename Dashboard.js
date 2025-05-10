@@ -1,6 +1,7 @@
+// ✅ Dashboard.js - Glassmorphic Dark Theme with Donut Chart
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Bar, Pie, Line } from 'react-chartjs-2';
+import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,8 +14,9 @@ import {
   LineElement,
   PointElement
 } from 'chart.js';
+
 import Chatbot from './chatbot';
-import './app.css'; // 
+import './app.css';
 
 ChartJS.register(
   CategoryScale,
@@ -33,54 +35,78 @@ function Dashboard() {
   const [categorySales, setCategorySales] = useState([]);
   const [genderData, setGenderData] = useState({});
   const [forecast, setForecast] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/kpis').then(res => setKpis(res.data));
-    axios.get('http://127.0.0.1:8000/sales-by-category').then(res => setCategorySales(res.data));
-    axios.get('http://127.0.0.1:8000/gender-distribution').then(res => setGenderData(res.data));
-    axios.get('http://127.0.0.1:8000/forecast').then(res => setForecast(res.data));
+    axios
+      .get(`http://127.0.0.1:8000/kpis`, {
+        params: selectedCategory ? { category: selectedCategory } : {}
+      })
+      .then((res) => setKpis(res.data));
+
+    axios
+      .get(`http://127.0.0.1:8000/gender-distribution`, {
+        params: selectedCategory ? { category: selectedCategory } : {}
+      })
+      .then((res) => setGenderData(res.data));
+
+    axios
+      .get(`http://127.0.0.1:8000/forecast`, {
+        params: selectedCategory ? { category: selectedCategory } : {}
+      })
+      .then((res) => setForecast(res.data));
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/sales-by-category').then((res) => setCategorySales(res.data));
   }, []);
 
   const barData = {
-    labels: categorySales.map(item => item["Product Category"]),
-    datasets: [{
-      label: 'Sales by Category',
-      data: categorySales.map(item => item["Total Amount"]),
-      backgroundColor: 'rgba(75, 192, 192, 0.7)'
-    }]
+    labels: categorySales.map((item) => item['Product Category']),
+    datasets: [
+      {
+        label: 'Sales by Category',
+        data: categorySales.map((item) => item['Total Amount']),
+        backgroundColor: 'rgba(0, 255, 255, 0.6)'
+      }
+    ]
   };
 
-  const pieData = {
+  const donutData = {
     labels: Object.keys(genderData),
-    datasets: [{
-      label: 'Gender Split',
-      data: Object.values(genderData),
-      backgroundColor: ['#FF6384', '#36A2EB']
-    }]
+    datasets: [
+      {
+        label: 'Gender Split',
+        data: Object.values(genderData),
+        backgroundColor: ['#ff6384', '#36a2eb'],
+        borderWidth: 2,
+        cutout: '70%'
+      }
+    ]
   };
 
   const forecastChartData = {
-    labels: forecast.map(f => f.ds.slice(0, 10)),
+    labels: forecast.map((f) => f.ds.slice(0, 10)),
     datasets: [
       {
         label: 'Forecast',
-        data: forecast.map(f => f.yhat),
-        borderColor: 'blue',
-        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+        data: forecast.map((f) => f.yhat),
+        borderColor: '#00e5ff',
+        backgroundColor: 'rgba(0, 229, 255, 0.1)',
         fill: false,
         tension: 0.3
       },
       {
         label: 'Lower Bound',
-        data: forecast.map(f => f.yhat_lower),
-        borderColor: 'gray',
+        data: forecast.map((f) => f.yhat_lower),
+        borderColor: '#888',
         borderDash: [5, 5],
         fill: false
       },
       {
         label: 'Upper Bound',
-        data: forecast.map(f => f.yhat_upper),
-        borderColor: 'gray',
+        data: forecast.map((f) => f.yhat_upper),
+        borderColor: '#888',
         borderDash: [5, 5],
         fill: false
       }
@@ -89,50 +115,57 @@ function Dashboard() {
 
   return (
     <div className="container">
-      <h1>📊 InsightPulse Retail Dashboard</h1>
+      <h1 className="dashboard-title center ">InsightPulse Retail Dashboard</h1>
+
+      {selectedCategory && (
+        <div className="filter-label">
+          📦 Filtering by <strong>{selectedCategory}</strong>
+        </div>
+      )}
 
       <div className="cards">
-        <div className="card">
-          Revenue: ${kpis.revenue !== undefined ? kpis.revenue : 'Loading...'}
-        </div>
-        <div className="card">
-          Customers: {kpis.customers !== undefined ? kpis.customers : 'Loading...'}
-        </div>
-        <div className="card">
-          Transactions: {kpis.transactions !== undefined ? kpis.transactions : 'Loading...'}
-        </div>
-        <div className="card">
-          Avg Basket: ${kpis.avg_basket !== undefined ? kpis.avg_basket : 'Loading...'}
-        </div>
+        <div className="card-glass">Revenue: ${kpis.revenue !== undefined ? kpis.revenue : 'Loading...'}</div>
+        <div className="card-glass">Customers: {kpis.customers !== undefined ? kpis.customers : 'Loading...'}</div>
+        <div className="card-glass">Transactions: {kpis.transactions !== undefined ? kpis.transactions : 'Loading...'}</div>
+        <div className="card-glass">Avg Basket: ${kpis.avg_basket !== undefined ? kpis.avg_basket : 'Loading...'}</div>
       </div>
 
       <div className="chart-grid">
-        <div className="chart-box">
-          <h2>💼 Sales by Product Category</h2>
+        <div className="chart-box-glass">
+          <h2>💼 {selectedCategory ? `${selectedCategory} Sales Overview` : 'Sales by Product Category'}</h2>
           <div style={{ height: '280px' }}>
-            <Bar data={barData} options={{ maintainAspectRatio: false }} />
+            <Bar
+              data={barData}
+              options={{
+                maintainAspectRatio: false,
+                onClick: (event, elements) => {
+                  if (elements.length > 0) {
+                    const index = elements[0].index;
+                    const category = barData.labels[index];
+                    setSelectedCategory(prev => prev === category ? null : category);
+                  }
+                }
+              }}
+            />
           </div>
         </div>
 
-        <div className="chart-box">
-          <h2>👥 Gender Distribution</h2>
-          <div style={{ height: '250px', maxWidth: '260px', margin: '0 auto' }}>
-            <Pie data={pieData} options={{ maintainAspectRatio: false }} />
+        <div className="chart-box-glass">
+          <h2>👥 {selectedCategory ? `Gender Distribution in ${selectedCategory}` : 'Gender Distribution'}</h2>
+          <div style={{ height: '260px', maxWidth: '280px', margin: '0 auto' }}>
+            <Doughnut data={donutData} options={{ maintainAspectRatio: false }} />
           </div>
         </div>
 
-        <div className="chart-box">
-          <h2>📈 30-Day Revenue Forecast</h2>
+        <div className="chart-box-glass">
+          <h2>📈 {selectedCategory ? `${selectedCategory} Revenue Forecast (30 Days)` : '30-Day Revenue Forecast'}</h2>
           <div style={{ height: '280px' }}>
             <Line data={forecastChartData} options={{ maintainAspectRatio: false }} />
           </div>
         </div>
-
-        {/* Chatbot in a full-width box */}
-        <div className="chart-box" style={{ gridColumn: "1 / -1" }}>
-          <Chatbot />
-        </div>
       </div>
+
+      <Chatbot />
     </div>
   );
 }
