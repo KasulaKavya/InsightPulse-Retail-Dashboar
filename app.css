@@ -1,29 +1,40 @@
-/* ✅ App.css - Dark Neon Glassmorphic Theme with Donut Chart */
+/* Dark Neon Glassmorphic Theme */
+
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background: linear-gradient(-45deg, #101e29, #1f0036, #001f3f, #120b2a);
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
   color: #eee;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .container {
   padding: 2rem;
   max-width: 1200px;
   margin: auto;
+  position: relative;
 }
 
 .dashboard-title {
   text-align: center;
-  color: #00e5ff;
-  font-size: 2rem;
+  color: #ffffff;
+  font-size: 2.2rem;
   margin-bottom: 1rem;
-  text-shadow: 0 0 10px #00e5ff;
+  text-shadow: 0 0 20px #8a2be2, 0 0 10px #fff;
 }
 
 .filter-label {
   text-align: center;
-  color: #fff;
+  color: #00e5ff;
   margin-bottom: 1rem;
   font-style: italic;
 }
@@ -36,16 +47,22 @@ body {
 }
 
 .card-glass {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
   padding: 1.5rem;
   border-radius: 16px;
   font-size: 1.2rem;
   font-weight: bold;
-  color: #00e5ff;
+  color: #b2fff2;
   text-align: center;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 255, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-glass:hover {
+  transform: perspective(600px) rotateY(4deg) rotateX(4deg);
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
 .chart-grid {
@@ -55,21 +72,27 @@ body {
 }
 
 .chart-box-glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.1));
   padding: 1.5rem;
   border-radius: 16px;
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 0 8px rgba(255, 255, 255, 0.1);
   position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-box-glass:hover {
+  transform: perspective(600px) rotateY(4deg) rotateX(4deg);
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
 .chart-box-glass h2 {
-  color: #fff;
+  color: #aaffff;
   font-size: 1.1rem;
   text-align: center;
   margin-bottom: 1rem;
-  text-shadow: 0 0 5px #00e5ff;
+  text-shadow: 0 0 10px #00e5ff, 0 0 5px #fff;
 }
 
 .donut-center-text {
@@ -77,13 +100,13 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: #00e5ff;
   pointer-events: none;
 }
 
-/* ✅ Chatbot Glassmorphic */
+/* Chatbot Glassmorphism */
 .chatbot-wrapper {
   position: fixed;
   bottom: 0;
@@ -94,31 +117,32 @@ body {
 }
 
 .chatbot-button-glass {
-  background: #00e5ff;
-  color: black;
+  background: linear-gradient(135deg, #fcb045, #fd1d1d, #833ab4);
+  color: #fff;
   border: none;
   padding: 12px 24px;
   border-radius: 24px;
   font-size: 16px;
   cursor: pointer;
   margin: 1rem auto;
-  box-shadow: 0 4px 12px rgba(0, 229, 255, 0.5);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
   transition: transform 0.3s ease;
 }
 
 .chatbot-button-glass:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6);
 }
 
 .chatbot-panel-glass {
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.07);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
   border-radius: 16px 16px 0 0;
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 -4px 16px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 -4px 16px rgba(0, 229, 255, 0.4), inset 0 0 12px rgba(255, 255, 255, 0.1);
   padding: 1rem;
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(20px);
   animation: slideUp 0.4s ease;
   color: #eee;
 }
@@ -129,6 +153,7 @@ body {
   font-weight: bold;
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
+  color: #ffccff;
 }
 
 .chatbot-header-glass button {
@@ -156,12 +181,14 @@ body {
 }
 
 .chatbot-form-glass button {
-  background: #00e5ff;
+  background: linear-gradient(to right, #00e5ff, #ffb6d9);
   color: #000;
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
 }
 
 .chatbot-body-glass {
@@ -169,6 +196,9 @@ body {
   overflow-y: auto;
   font-size: 14px;
   text-align: left;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 0.5rem;
 }
 
 .chatbot-body-glass table {
@@ -194,4 +224,10 @@ body {
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+#particle-wrapper canvas {
+  filter: drop-shadow(0 0 4px #FFD700) drop-shadow(0 0 8px #FFFAF0);
+  opacity: 0.9;
+  transition: opacity 0.5s ease-in-out;
 }
